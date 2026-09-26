@@ -1,0 +1,35 @@
+{
+  "name": "claude-smb-workshop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ClaudeMyCompany.com — workshop sign-up, welcome pages and take-home resources.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "icons": "node scripts/make-icons.mjs"
+  },
+  "dependencies": {
+    "lucide-react": "1.48.0",
+    "next": "16.3.6",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@fontsource-variable/inter": "5.3.0",
+    "@fontsource-variable/source-sans-3": "5.3.0",
+    "@playwright/test": "1.56.0",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5",
+    "vitest": "5.0.2"
+  },
+  "engines": {
+    "node": ">=20.9"
+  }
+}
