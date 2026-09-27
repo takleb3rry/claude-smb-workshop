@@ -118,7 +118,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
         <section className="band" id="fit">
           <div className="wrap">
             <p className="eyebrow">Is this for me?</p>
-            <h2>Four questions owners ask before they sign up</h2>
+            <h2>Four questions owners ask before you sign up</h2>
             <div className="objections">
               {OBJECTIONS.map((o) => (
                 <div key={o.q} className={`obj ${o.dark ? 'dark' : ''}`.trim()}>
