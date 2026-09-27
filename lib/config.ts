@@ -16,9 +16,9 @@ export const site = {
     initials: 'JT',
     /** Confirm this matches the exact wording Anthropic gave you. */
     credential: 'Approved Claude SMB Trainer',
-    bio: 'I run small, hands-on workshops for owners and leaders who want Claude connected to their tools and handling real work in their business.',
-    /** Put a square photo in /public (for example /jeff-takle.jpg) and set its path here. */
-    photo: null as string | null,
+    bio: 'I’ve been CEO of venture-backed startups in several industries. Today I work at Renewal Initiatives, helping small and mid-sized businesses get the technology they need to compete. I keep these workshops small and hands-on, so you leave with something running in your business.',
+    /** Square photo in /public. Replace the file to change it; keep it square (400×400 is plenty). */
+    photo: '/jeff-takle.jpg' as string | null,
   },
 
   contactEmail: 'claude@takle.me',
