@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { sessions } = await loadSessions();
   const s = findSession(sessions, code);
   return {
-    title: s ? `Welcome · ${fDay(s.date)} · ${placeLabel(s)}` : 'Welcome',
+    title: s ? [s.title, 'Welcome', fDay(s.date), placeLabel(s)].filter(Boolean).join(' · ') : 'Welcome',
     robots: { index: false, follow: false },
   };
 }
@@ -122,7 +122,7 @@ export default async function WorkshopPage({ params, searchParams }: Params) {
     : stage === 'after' ? <span className="stage-pill after"><Icon name="circle-check" /> Resources open · {left} {left === 1 ? 'day' : 'days'} left</span>
     : <span className="stage-pill after"><Icon name="circle-check" /> Wrapped</span>;
 
-  const title =
+  const heading =
     s.status === 'cancelled' ? 'This workshop was cancelled.'
     : stage === 'before' ? `You’re all set for ${weekdayLong(s.date)}.`
     : stage === 'dayof' ? 'Welcome. Let’s get you signed in.'
@@ -278,7 +278,8 @@ export default async function WorkshopPage({ params, searchParams }: Params) {
         <div className="portal-hero">
           <div className="narrow">
             {pill}
-            <h1>{title}</h1>
+            {s.title && <p className="portal-title">{s.title}</p>}
+            <h1>{heading}</h1>
             <p>{fDay(s.date)} · {where} · {timeRange(s)}</p>
             {preview && (
               <nav className="stage-switch" aria-label="Preview this page as">

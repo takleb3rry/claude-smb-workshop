@@ -131,7 +131,7 @@ export function RequestFlow({ sessions, initialCode, unknownCode, reviewDays, co
         <div className="summary">
           <p className="kicker">Your request</p>
           <dl>
-            <dt>Workshop</dt><dd>{chosen ? `${fDay(chosen.date)} · ${place(chosen)}` : 'Any upcoming workshop'}</dd>
+            <dt>Workshop</dt><dd>{chosen ? <>{chosen.title && <strong className="sum-title">{chosen.title}</strong>}{`${fDay(chosen.date)} · ${place(chosen)}`}</> : 'Any upcoming workshop'}</dd>
             <dt>Business</dt><dd>{industry}</dd>
             <dt>Team size</dt><dd>{a.size}</dd>
             <dt>Your role</dt><dd>{a.role}</dd>
@@ -175,11 +175,17 @@ export function RequestFlow({ sessions, initialCode, unknownCode, reviewDays, co
         <label className="sr-only" htmlFor="code">Workshop</label>
         <select id="code" name="code" value={a.code} onChange={(e) => set('code', e.target.value)}>
           {sessions.map((s) => (
-            <option key={s.code} value={s.code}>{fDay(s.date)} · {place(s)}{s.full ? ' (waitlist)' : ''}</option>
+            <option key={s.code} value={s.code}>{[fDay(s.date), s.title, place(s)].filter(Boolean).join(' · ')}{s.full ? ' (waitlist)' : ''}</option>
           ))}
           <option value="any">Any upcoming workshop</option>
         </select>
       </div>
+      {chosen?.title && (
+        <div className="req-title">
+          <h2>{chosen.title}</h2>
+          <p>{fDay(chosen.date)} · {place(chosen)}</p>
+        </div>
+      )}
       {unknownCode && step === 1 && (
         <p className="notice"><Icon name="info" /> <span>That workshop isn’t taking requests anymore. Pick another one above, or choose “Any upcoming workshop.”</span></p>
       )}

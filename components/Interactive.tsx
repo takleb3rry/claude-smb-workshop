@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Icon } from './Icon';
+import { RichText } from './RichText';
 
 /** Copies text; falls back to selecting it when the clipboard is blocked. */
 export function CopyButton({ text, label = 'Copy' }: { text: string; label?: string }) {
@@ -45,7 +46,7 @@ export function ReadyChecklist({ items, storageKey }: { items: string[]; storage
         <li key={t}>
           <label htmlFor={`rd-${i}`}>
             <input type="checkbox" id={`rd-${i}`} checked={done.includes(i)} onChange={() => toggle(i)} />
-            <span>{t}</span>
+            <span><RichText text={t} /></span>
           </label>
         </li>
       ))}

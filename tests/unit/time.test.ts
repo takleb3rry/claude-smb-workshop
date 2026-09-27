@@ -3,7 +3,7 @@ import { addDays, addMinutes, daysBetween, fDay, fLong, fTime, isLive, stageOf, 
 import type { Session } from '@/lib/types';
 
 const base: Session = {
-  code: 'x', status: 'open', date: '2026-10-15', start: '09:00', end: '12:30', timeZone: 'America/New_York',
+  code: 'x', title: '', status: 'open', date: '2026-10-15', start: '09:00', end: '12:30', timeZone: 'America/New_York',
   format: 'in-person', city: 'Easthampton, MA', venue: 'V', room: 'R', address: '', mapUrl: '', parking: '',
   seats: 20, accepted: 5, workshopLink: '', cohortPassword: '', wifiName: '', wifiPassword: '',
   promoCode: '', promoUnlocks: '', promoRedeem: '', promoExpires: '', surveyLink: '',

@@ -86,3 +86,32 @@ describe('lists', () => {
     expect(findSession([{ ...sample[2], status: 'draft' }], sample[2].code)).toBeUndefined();
   });
 });
+
+describe('workshop titles', () => {
+  const row = { date: '2026-10-15', start: '9:00', end: '12:30', city: 'Easthampton, MA' };
+
+  it('trims the title and keeps it public', () => {
+    const s = normalizeSession({ ...row, title: '  Claude for Nonprofits  ' })!;
+    expect(s.title).toBe('Claude for Nonprofits');
+    expect(toPublic(s).title).toBe('Claude for Nonprofits');
+  });
+
+  it('treats a missing or blank title as empty, not undefined', () => {
+    expect(normalizeSession(row)!.title).toBe('');
+    expect(normalizeSession({ ...row, title: '   ' })!.title).toBe('');
+    expect(toPublic(normalizeSession(row)!).title).toBe('');
+  });
+
+  it('caps a very long title at 120 characters', () => {
+    const s = normalizeSession({ ...row, title: 'x'.repeat(400) })!;
+    expect(s.title).toHaveLength(120);
+  });
+
+  it('gives the samples titles, one blank, and no online workshops', () => {
+    const list = sampleSessions(new Date('2026-10-15T12:00:00Z'));
+    expect(list.filter((s) => s.title).length).toBeGreaterThan(1);
+    expect(list.some((s) => s.title === '')).toBe(true);
+    expect(list.every((s) => s.format === 'in-person')).toBe(true);
+    expect(list.some((s) => s.status === 'full')).toBe(true);
+  });
+});

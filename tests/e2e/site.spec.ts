@@ -39,6 +39,19 @@ test.describe('homepage', () => {
     expect(errors).toEqual([]);
   });
 
+  test('workshop cards lead with the title, and untitled ones look unchanged', async ({ page }) => {
+    await page.goto('/');
+    const titled = page.locator('#workshops .session').filter({ hasText: 'Claude for Nonprofits' });
+    await expect(titled.locator('h3.s-title')).toHaveText('Claude for Nonprofits');
+    await expect(titled.locator('.s-where')).toContainText('Holyoke, MA');
+    // The untitled sample keeps today's layout: place in the heading, no title element.
+    const untitled = page.locator('#workshops .session').filter({ hasText: 'Easthampton, MA' });
+    await expect(untitled.locator('h3')).toHaveText(/Easthampton, MA/);
+    await expect(untitled.locator('.s-title')).toHaveCount(0);
+    // Hero trainer card names the next workshop.
+    await expect(page.locator('.trainer-card .tc-title')).toHaveText('Claude for Nonprofits');
+  });
+
   test('follows the copy rules', async ({ page }) => {
     await page.goto('/');
     const text = await page.locator('main').innerText();
@@ -116,6 +129,16 @@ test.describe('request a seat', () => {
     expect(errors).toEqual([]);
   });
 
+  test('names the chosen workshop in the header, picker and confirmation', async ({ page }) => {
+    const code = await firstSessionCode(page);
+    await page.goto(`/request/${code}`);
+    await expect(page.locator('.req-title h2')).toHaveText('Claude for Nonprofits');
+    await expect(page.locator('.req-title p')).toContainText('Holyoke, MA');
+    const picked = await page.locator('#code option').first().innerText();
+    expect(picked).toContain('Claude for Nonprofits');
+    expect(picked).toContain('Holyoke, MA');
+  });
+
   test('"any upcoming workshop" path', async ({ page }) => {
     await page.goto('/request/any');
     await expect(page.locator('#code')).toHaveValue('any');
@@ -175,7 +198,27 @@ test.describe('request API', () => {
     const body = await r.text();
     expect(body).toContain('BEGIN:VEVENT');
     expect(body).toContain('STATUS:TENTATIVE');
+    expect(body).toContain('SEQUENCE:0');
+    expect(body).toContain('SUMMARY:Claude for Nonprofits (requested)');
+    expect(body).not.toContain('/welcome/');
     expect((await request.get('/api/calendar/nope')).status()).toBe(404);
+  });
+
+  test('serves the confirmed calendar file at ?confirmed=1', async ({ page, request }) => {
+    const code = await firstSessionCode(page);
+    const r = await request.get(`/api/calendar/${code}?confirmed=1`);
+    expect(r.status()).toBe(200);
+    expect(r.headers()['content-type']).toContain('text/calendar');
+    const body = await r.text();
+    expect(body).toContain('STATUS:CONFIRMED');
+    expect(body).toContain('SEQUENCE:1');
+    expect(body).toContain('SUMMARY:Claude for Nonprofits');
+    expect(body).toContain(`/welcome/${code}`);
+    expect(body).toContain('Bring a laptop and a charger.');
+    // Same UID as the hold, so calendars replace it instead of duplicating.
+    const hold = await (await request.get(`/api/calendar/${code}`)).text();
+    const uid = (s: string) => /^UID:.*$/m.exec(s)?.[0];
+    expect(uid(body)).toBe(uid(hold));
   });
 });
 
@@ -187,6 +230,16 @@ test.describe('welcome pages', () => {
     await expect(page.getByRole('heading', { name: 'Coming up' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Recently finished' })).toBeVisible();
     await expect(page.locator('.hub-card')).toHaveCount(2);
+    await expect(page.locator('.hub-card h3').first()).toHaveText('Claude for Nonprofits');
+  });
+
+  test('the welcome hero leads with the workshop title', async ({ page }) => {
+    const code = await firstSessionCode(page);
+    await page.goto(`/welcome/${code}`);
+    await expect(page.locator('.portal-title')).toHaveText('Claude for Nonprofits');
+    // The stage heading stays the H1.
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('You’re all set for');
+    await expect(page).toHaveTitle(/^Claude for Nonprofits · Welcome/);
   });
 
   test('a workshop page moves through before, day of and after', async ({ page }) => {
@@ -247,7 +300,22 @@ test.describe('other pages and files', () => {
   test('FAQ opens answers', async ({ page }) => {
     await page.goto('/faq');
     await page.getByText('What does it cost?').click();
-    await expect(page.getByText('Nothing. Workshops are free.')).toBeVisible();
+    await expect(page.getByText('Nothing, and there is no catch.')).toBeVisible();
+    await expect(page.locator('main')).toContainText('Anthropic sponsors the “Claude SMB Trainer” program');
+  });
+
+  test('FAQ carries the workshop-email wording', async ({ page }) => {
+    await page.goto('/faq');
+    const main = page.locator('main');
+    await expect(main).toContainText('it’s safest to bring a backup Gmail account');
+    await expect(main).toContainText('Cowork is available on the Pro and Max plans');
+    await expect(main).toContainText('vouchers for a free month of Max');
+    await expect(main).not.toContainText('spare account will be ready');
+    // The answers live in collapsed <details>, so open this one before looking for its link.
+    await page.getByText('Desktop app or web?').click();
+    const dl = main.getByRole('link', { name: 'https://claude.com/download' }).first();
+    await expect(dl).toHaveAttribute('href', 'https://claude.com/download');
+    await expect(dl).toHaveAttribute('target', '_blank');
   });
 
   test('privacy note', async ({ page }) => {

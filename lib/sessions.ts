@@ -13,7 +13,7 @@ export interface SessionsResult {
 /**
  * Reads the Sessions tab through the sheet's Apps Script web app.
  * Contract: GET {APPS_SCRIPT_URL}?action=sessions&key={APPS_SCRIPT_SECRET}
- *   → { ok: true, sessions: [{ code, status, date, start, end, timezone, format, city, venue, room,
+ *   → { ok: true, sessions: [{ code, title, status, date, start, end, timezone, format, city, venue, room,
  *        address, mapUrl, parking, seats, accepted, workshopLink, cohortPassword, wifiName, wifiPassword,
  *        promoCode, promoUnlocks, promoRedeem, promoExpires, surveyLink }] }
  * Cached for 60 seconds, so a new row shows up within a minute and the sheet isn't hit on every visit.
@@ -39,6 +39,9 @@ export async function loadSessions(now: Date = new Date()): Promise<SessionsResu
 }
 
 const str = (v: unknown) => (v === null || v === undefined ? '' : String(v).trim());
+
+/** Titles are free text in the sheet; keep them to a headline length. */
+export const TITLE_MAX = 120;
 
 function toInt(v: unknown, fallback: number): number {
   const n = Number.parseInt(str(v), 10);
@@ -84,6 +87,8 @@ export function normalizeSession(raw: unknown): Session | null {
   const tz = str(r.timezone || r.timeZone);
   return {
     code,
+    // Public, like city and date. Free text from the sheet, so cap it.
+    title: str(r.title).slice(0, TITLE_MAX),
     status: toStatus(r.status),
     date, start, end,
     timeZone: tz && isValidTimeZone(tz) ? tz : site.defaultTimeZone,
@@ -121,7 +126,7 @@ export function seatInfo(s: Pick<Session, 'seats' | 'accepted' | 'status'>) {
 
 export function toPublic(s: Session): PublicSession {
   return {
-    code: s.code, date: s.date, start: s.start, end: s.end, timeZone: s.timeZone, format: s.format,
+    code: s.code, title: s.title, date: s.date, start: s.start, end: s.end, timeZone: s.timeZone, format: s.format,
     city: s.city, venue: s.venue, room: s.room, seats: s.seats, accepted: s.accepted, full: seatInfo(s).full,
   };
 }

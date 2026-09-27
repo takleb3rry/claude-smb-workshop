@@ -19,7 +19,12 @@ function HubCard({ s, kind, now }: { s: Session; kind: 'today' | 'soon' | 'recen
     : `Finished · resources open until ${windowEndDay(s)}`;
   return (
     <div className={`hub-card ${kind === 'today' ? 'today' : ''}`.trim()}>
-      <div><h3>{fDay(s.date)} · {placeLabel(s)}</h3><p>{line}</p></div>
+      <div>
+        {s.title
+          ? <><h3>{s.title}</h3><p className="hub-where">{fDay(s.date)} · {placeLabel(s)}</p></>
+          : <h3>{fDay(s.date)} · {placeLabel(s)}</h3>}
+        <p>{line}</p>
+      </div>
       <Link className={`btn ${kind === 'today' ? 'btn-primary' : 'btn-outline'}`} href={`/welcome/${s.code}`}>
         Open my welcome page <Icon name="arrow-right" />
       </Link>

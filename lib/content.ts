@@ -89,9 +89,9 @@ export const FAQ: FaqGroup[] = [
   ]},
   { g: 'Before you come', items: [ /* src: Step 2 (one week out) */
     { q: 'What should I bring?', a: ['A laptop and a charger. A tablet will not work for the exercises.'] },
-    { q: 'Do I need a Claude account?', a: ['Tell us in your request whether you have one. If you’re accepted, you’ll get setup steps before the day, including any promo code and where to enter it.'] },
-    { q: 'Desktop app or web?', a: ['Use the desktop app if you can. It’s the fuller experience. The web version works too. Sign in before you arrive, not on the day.'] },
-    { q: 'My work email is locked down by IT.', a: ['Locked-down work email may not connect. A spare account will be ready so you can keep going.'] },
+    { q: 'Do I need a Claude account?', a: ['Yes. Cowork is available on the Pro and Max plans, so you’ll need one of those. Jeff often has vouchers for a free month of Max. If you’d like one, email claude@takle.me. Tell us in your request which plan you have now. If you’re accepted, you’ll get setup steps before the day, including any promo code and where to enter it.'] },
+    { q: 'Desktop app or web?', a: ['Use the desktop app if you can. It’s the fuller experience. The web version works too. Sign in before you arrive, not on the day. Download it at https://claude.com/download.'] },
+    { q: 'My work email is locked down by IT.', a: ['If you think your work email might be locked down by your IT department, it’s safest to bring a backup Gmail account. You can use a personal Gmail account for the class too.'] },
   ]},
   { g: 'Your data', items: [ /* src: deck slides 22, 23; Step 10 */
     { q: 'Is my business data safe?', a: ['From Anthropic’s workshop deck: “We don’t train our models on your business content. You own what goes in — and what comes out.” Data is encrypted end to end, walled off from every other company, never sold, and deletable on request. Anthropic is audited yearly for SOC 2 and ISO 27001; details are public at trust.anthropic.com.', 'Start on a Team plan and that’s the default.'] },
@@ -108,17 +108,17 @@ export const HOME_FAQ: [string, number][] = [['The workshop', 0], ['Requests', 1
 
 /** Course Step 2, Welcome Portal tab + One week out. */
 export const GET_READY = [
-  'Get the Claude desktop app if you can. The web version works too.',
+  '[Get the Claude desktop app](https://claude.com/download) if you can. The web version works too.',
   'Sign in before you arrive, not on the day.',
   'Check you can reach Cowork now. Some accounts and devices don’t have it yet.',
   'Pack your laptop and charger. A tablet won’t work for the exercises.',
-  'Using a locked-down work email? It may not connect. A spare account will be ready.',
+  'Work email locked down by IT? Bring a backup Gmail account. A personal one works for the class too.',
 ];
 
-/** Course Step 10 watch-out; Step 2 (spare account); Step 2 Room tab (neighbours help each other). */
+/** Course Step 10 watch-out; Step 2 (backup Gmail account); Step 2 Room tab (neighbours help each other). */
 export const STUCK_TIPS = [
   'Sign-in pop-ups often open behind the app. If nothing happens, look behind your window.',
-  'Work email locked down by IT? Ask for the spare account and keep going.',
+  'Work email locked down by IT? Switch to your backup Gmail account and keep going.',
   'Ask your table first. Neighbours often know the next click. Then raise a hand.',
 ];
 

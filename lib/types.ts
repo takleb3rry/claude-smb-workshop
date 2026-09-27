@@ -5,6 +5,8 @@ export type SessionFormat = 'in-person' | 'online';
 export interface Session {
   code: string;
   status: SessionStatus;
+  /** Free-text workshop name, e.g. "Claude for the Trades". May be empty. Public. */
+  title: string;
   date: string; // YYYY-MM-DD
   start: string; // HH:MM (24h)
   end: string; // HH:MM (24h)
@@ -33,6 +35,7 @@ export interface Session {
 /** The public subset that is safe to send to the browser (request form, cards). */
 export interface PublicSession {
   code: string;
+  title: string;
   date: string;
   start: string;
   end: string;

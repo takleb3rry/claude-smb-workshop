@@ -6,6 +6,7 @@ import { placeLabel, seatInfo } from '@/lib/sessions';
 import { dowShort, fDay, fTime, monthDay, zoneLabel } from '@/lib/time';
 import type { Session } from '@/lib/types';
 import { Icon } from './Icon';
+import { RichText } from './RichText';
 
 export function SeatsBar({ s }: { s: Pick<Session, 'seats' | 'accepted' | 'status'> }) {
   const k = seatInfo(s);
@@ -30,7 +31,9 @@ export function SessionCard({ s, soon }: { s: Session; soon: boolean }) {
     <article className={`session ${soon ? 'soon' : ''}`.trim()}>
       <div className="datechip" aria-hidden="true"><span>{dowShort(s.date)}</span><strong>{monthDay(s.date)}</strong></div>
       <div>
-        <h3>{placeLabel(s)}{s.format === 'online' || !s.room ? '' : ` · ${s.room}`}</h3>
+        {s.title
+          ? <><h3 className="s-title">{s.title}</h3><p className="s-where">{placeLabel(s)}{s.format === 'online' || !s.room ? '' : ` · ${s.room}`}</p></>
+          : <h3>{placeLabel(s)}{s.format === 'online' || !s.room ? '' : ` · ${s.room}`}</h3>}
         <p className="s-meta">
           <span><Icon name="calendar-days" /> {fDay(s.date)}</span>
           <span><Icon name="clock" /> {timeRange(s)}</span>
@@ -65,6 +68,7 @@ export function TrainerCard({ next }: { next?: Session }) {
         <p className="kicker">Next workshop</p>
         {next ? (
           <>
+            {next.title && <p className="tc-title">{next.title}</p>}
             <p className="tc-when">{fDay(next.date)} · {placeLabel(next)}</p>
             <p className="tc-time">{timeRange(next)} · Free</p>
             <SeatsBar s={next} />
@@ -127,7 +131,7 @@ export function FaqItem({ q, a }: { q: string; a: string[] }) {
   return (
     <details className="faq-item">
       <summary>{q}<Icon name="chevron-down" /></summary>
-      <div className="a">{a.map((p) => <p key={p}>{p}</p>)}</div>
+      <div className="a">{a.map((p) => <p key={p}><RichText text={p} /></p>)}</div>
     </details>
   );
 }
