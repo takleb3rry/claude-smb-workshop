@@ -45,7 +45,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
           <div className="wrap">
             <p className="eyebrow">Before and after</p>
             <h2>What changed for two business owners</h2>
-            <p className="sub">Both examples come from Anthropic’s SMB workshop deck.</p>
+            <p className="sub">Both examples come from Anthropic’s SMB workshops in 2026.</p>
             <div className="cases">{CASES.map((c) => <CaseCard key={c.who} c={c} />)}</div>
           </div>
         </section>
