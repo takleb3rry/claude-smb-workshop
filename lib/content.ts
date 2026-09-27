@@ -76,7 +76,7 @@ export interface FaqGroup { g: string; items: { q: string; a: string[] }[] }
 
 export const FAQ: FaqGroup[] = [
   { g: 'The workshop', items: [
-    { q: 'What does it cost?', a: ['Nothing. Workshops are free. Seats are limited, so you request one and we confirm by email.'] },
+    { q: 'What does it cost?', a: ['Nothing, and there is no catch. Seats are limited, so you request one and we confirm by email.', 'Anthropic sponsors this program because small and medium businesses deserve the same help the large technology companies are getting to figure out how to work with AI. Jeff is a Claude SMB trainer, trained by Anthropic to run these sessions for you at no cost.', 'There is no requirement to work with Anthropic or to use their products afterwards. The skills apply across the whole AI landscape, though the terminology differs a little from tool to tool. We run these sessions so that everybody gets a chance to use these tools. Period.'] },
     { q: 'Who is it for?', a: ['Owners and senior leaders of businesses with 5 to 500 people who are new to AI and want to connect Claude to the tools they already use.'] },
     { q: 'Do I need to be technical?', a: ['No. It’s not technical. It’s a management skill, and you already have it. You describe what you need in plain English, the way you’d brief a smart new hire.'] }, /* src: deck slides 10, 28 */
     { q: 'What will I leave with?', a: ['Three things: an approach to AI fluency (the 4D framework and power moves that work on any model), an AI workflow (a real thing, on a real problem from your business, that takes input and produces output), and the confidence to execute.'] }, /* src: deck slide 5 */
